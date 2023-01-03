@@ -1,0 +1,26 @@
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+
+public class EntityComparer {
+    public static <T> Map<String, Object> compare(T t1, T t2) {
+        Map<String, Object> differences = new HashMap<>();
+        Class<?> clazz = t1.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(NeedCompare.class)) {
+                field.setAccessible(true);
+                try {
+                    Object value1 = field.get(t1);
+                    Object value2 = field.get(t2);
+                    if (!value1.equals(value2)) {
+                        differences.put(field.getName(), value2);
+                    }
+                } catch (IllegalAccessException e) {
+                    // 异常处理
+                }
+            }
+        }
+        return differences;
+    }
+}
