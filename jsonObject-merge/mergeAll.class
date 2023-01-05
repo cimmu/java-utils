@@ -1,0 +1,30 @@
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
+// 合并JSONArray中有指定相同属性的的JSONObject
+// 定义两个输入的JSONArray
+JSONArray array1 = ...;
+JSONArray array2 = ...;
+
+// 创建一个新的JSONArray用于存储结果
+JSONArray resultArray = new JSONArray();
+
+// 遍历array1中的所有JSONObject
+for (int i = 0; i < array1.size(); i++) {
+  JSONObject object1 = array1.getJSONObject(i);
+  String name1 = object1.getString("name");
+
+  // 遍历array2中的所有JSONObject
+  for (int j = 0; j < array2.size(); j++) {
+    JSONObject object2 = array2.getJSONObject(j);
+    String name2 = object2.getString("name");
+
+    // 如果名字相同，就将这两个JSONObject合并到一起
+    if (name1.equals(name2)) {
+      JSONObject mergedObject = new JSONObject();
+      mergedObject.putAll(object1);
+      mergedObject.putAll(object2);
+      resultArray.add(mergedObject);
+    }
+  }
+}
