@@ -1,0 +1,40 @@
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
+// 定义两个输入的JSONArray
+JSONArray array1 = ...;
+JSONArray array2 = ...;
+
+// 创建一个新的JSONArray用于存储结果
+JSONArray resultArray = new JSONArray();
+
+// 创建一个HashMap用于存储array1中的JSONObject
+Map<String, JSONObject> map = new HashMap<>();
+for (int i = 0; i < array1.size(); i++) {
+  JSONObject object = array1.getJSONObject(i);
+  String name = object.getString("name");
+  map.put(name, object);
+}
+
+// 遍历array2中的所有JSONObject
+for (int i = 0; i < array2.size(); i++) {
+  JSONObject object = array2.getJSONObject(i);
+  String name = object.getString("name");
+
+  // 如果名字相同，就将这两个JSONObject的指定的多个属性合并到一起
+  if (map.containsKey(name)) {
+    JSONObject mergedObject = new JSONObject();
+    JSONObject object1 = map.get(name);
+
+    // 合并name属性
+    mergedObject.put("name", name);
+
+    // 合并其他指定的属性
+    mergedObject.put("prop1", object1.get("prop1"));
+    mergedObject.put("prop2", object1.get("prop2"));
+    mergedObject.put("prop3", object2.get("prop3"));
+    mergedObject.put("prop4", object2.get("prop4"));
+
+    resultArray.add(mergedObject);
+  }
+}
